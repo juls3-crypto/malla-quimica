@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malla Curricular - Química</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 1rem;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #2a6f97;
+    }
+    .grid {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+    .semester {
+      background-color: #ffffff;
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      min-width: 220px;
+      flex-shrink: 0;
+    }
+    .semester h2 {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #155fa0;
+    }
+    .course {
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      background-color: #e6f2ff;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .course.approved {
+      background-color: #d1e7dd;
+      text-decoration: line-through;
+    }
+    .course.locked {
+      background-color: #f8d7da;
+      cursor: not-allowed;
+    }
+    .tooltip {
+      visibility: hidden;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 4px 8px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .course:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular Interactiva - Química</h1>
+  <div class="grid" id="malla"></div>
+
+  <script>
+    const materias = [
+      {
+        ciclo: "Primer Semestre",
+        cursos: [
+          { codigo: "6400", nombre: "Química Fundamental I" },
+          { codigo: "108", nombre: "Cálculo I" },
+          { codigo: "6416", nombre: "Historia de la Química" },
+          { codigo: "2816", nombre: "Taller de Textos Científicos" },
+        ]
+      },
+      {
+        ciclo: "Segundo Semestre",
+        cursos: [
+          { codigo: "6401", nombre: "Química Fundamental II", prereq: ["6400"] },
+          { codigo: "113", nombre: "Cálculo II", prereq: ["108"] },
+          { codigo: "109", nombre: "Álgebra Lineal" },
+          { codigo: "258", nombre: "Biología Celular" },
+          { codigo: "6418", nombre: "Física I", prereq: ["108"] },
+        ]
+      },
+      {
+        ciclo: "Tercer Semestre",
+        cursos: [
+          { codigo: "118", nombre: "Cálculo III", prereq: ["113"] },
+          { codigo: "114", nombre: "Estadística" },
+          { codigo: "6419", nombre: "Física II", prereq: ["6418"] },
+          { codigo: "6409", nombre: "Fisicoquímica I", prereq: ["6401", "113", "6418"] },
+          { codigo: "8848", nombre: "Estructura Atómica", prereq: ["6401"] },
+        ]
+      },
+      // Agrega más semestres aquí siguiendo el mismo formato
+    ];
+
+    const aprobadas = new Set(JSON.parse(localStorage.getItem('aprobadas')) || []);
+
+    function saveProgress() {
+      localStorage.setItem('aprobadas', JSON.stringify(Array.from(aprobadas)));
+    }
+
+    function checkLocked(prereq) {
+      return prereq && prereq.some(p => !aprobadas.has(p));
+    }
+
+    function renderMalla() {
+      const cont = document.getElementById("malla");
+      cont.innerHTML = "";
+
+      materias.forEach(({ ciclo, cursos }) => {
+        const col = document.createElement("div");
+        col.className = "semester";
+        col.innerHTML = `<h2>${ciclo}</h2>`;
+
+        cursos.forEach(({ codigo, nombre, prereq }) => {
+          const bloqueado = checkLocked(prereq);
+          const aprobada = aprobadas.has(codigo);
+          const div = document.createElement("div");
+          div.className = "course" + (aprobada ? " approved" : bloqueado ? " locked" : "");
+          div.dataset.codigo = codigo;
+
+          div.onclick = () => {
+            if (bloqueado) return;
+            if (aprobadas.has(codigo)) aprobadas.delete(codigo);
+            else aprobadas.add(codigo);
+            saveProgress();
+            renderMalla();
+          };
+
+          div.innerHTML = `${nombre}<br><small>(${codigo})</small>`;
+          if (bloqueado && prereq) {
+            const faltan = prereq.filter(p => !aprobadas.has(p)).join(", ");
+            const tooltip = document.createElement("div");
+            tooltip.className = "tooltip";
+            tooltip.innerText = `Faltan: ${faltan}`;
+            div.appendChild(tooltip);
+          }
+
+          col.appendChild(div);
+        });
+        cont.appendChild(col);
+      });
+    }
+
+    renderMalla();
+  </script>
+</body>
+</html>
