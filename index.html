@@ -109,7 +109,83 @@
           { codigo: "8848", nombre: "Estructura Atómica", prereq: ["6401"] },
         ]
       },
-      // Agrega más semestres aquí siguiendo el mismo formato
+      {
+        ciclo: "Cuarto Semestre",
+        cursos: [
+          { codigo: "6410", nombre: "Fisicoquímica II", prereq: ["6409"] },
+          { codigo: "4211", nombre: "Química Orgánica I", prereq: ["6401"] },
+          { codigo: "6404", nombre: "Química Analítica I", prereq: ["114", "6401"] },
+          { codigo: "6740", nombre: "Física III", prereq: ["6419"] },
+        ]
+      },
+      {
+        ciclo: "Quinto Semestre",
+        cursos: [
+          { codigo: "6405", nombre: "Química Analítica II", prereq: ["6404"] },
+          { codigo: "6407", nombre: "Química Orgánica II", prereq: ["4211"] },
+          { codigo: "6402", nombre: "Química Inorgánica I", prereq: ["8848"] },
+          { codigo: "3261", nombre: "Química Cuántica", prereq: ["8848", "118", "6740", "109"] },
+        ]
+      },
+      {
+        ciclo: "Sexto Semestre",
+        cursos: [
+          { codigo: "6411", nombre: "Bioquímica I", prereq: ["258", "6407"] },
+          { codigo: "6406", nombre: "Química Analítica III", prereq: ["6405"] },
+          { codigo: "6408", nombre: "Química Orgánica III", prereq: ["6407"] },
+          { codigo: "6403", nombre: "Química Inorgánica II", prereq: ["6402"] },
+        ]
+      },
+      {
+        ciclo: "Séptimo Semestre",
+        cursos: [
+          { codigo: "6412", nombre: "Bioquímica II", prereq: ["6411"] },
+          { codigo: "1559", nombre: "Análisis Instrumental", prereq: ["6406"] },
+          { codigo: "6362", nombre: "Gestión de Proyectos" },
+          { codigo: "8849", nombre: "Diseño de Experimentos Químicos", prereq: ["6405"] },
+        ]
+      },
+      {
+        ciclo: "Octavo Semestre",
+        cursos: [
+          { codigo: "6360", nombre: "Química Industrial", prereq: ["6409"] },
+          { codigo: "3256", nombre: "Análisis Orgánico", prereq: ["6408", "1559"] },
+          { codigo: "NP1", nombre: "Núcleo de Profundización I" },
+          { codigo: "152", nombre: "Seminario Proyecto de Grado", prereq: ["6362", "8849"] },
+        ]
+      },
+      {
+        ciclo: "Noveno Semestre",
+        cursos: [
+          { codigo: "6361", nombre: "Control de Calidad y Seguridad Industrial", prereq: ["6360"] },
+          { codigo: "NP2", nombre: "Núcleo de Profundización II" },
+        ]
+      },
+      {
+        ciclo: "Décimo Semestre",
+        cursos: [
+          { codigo: "1958", nombre: "Trabajo de Grado", prereq: ["152"] },
+        ]
+      },
+      {
+        ciclo: "Lengua Extranjera",
+        cursos: [
+          { codigo: "LE1", nombre: "Lengua Extranjera Nivel 1" },
+          { codigo: "LE2", nombre: "Lengua Extranjera Nivel 2", prereq: ["LE1"] },
+          { codigo: "LE3", nombre: "Lengua Extranjera Nivel 3", prereq: ["LE2"] },
+          { codigo: "LE4", nombre: "Lengua Extranjera Nivel 4", prereq: ["LE3"] },
+          { codigo: "LE5", nombre: "Lengua Extranjera Nivel 5", prereq: ["LE4"] },
+        ]
+      },
+      {
+        ciclo: "Formación Humanística",
+        cursos: [
+          { codigo: "FH1", nombre: "Saber Humanístico" },
+          { codigo: "FH2", nombre: "Actividades Culturales y Deportivas" },
+          { codigo: "FH3", nombre: "Formación Ciudadana" },
+          { codigo: "FH4", nombre: "Contexto Socio Histórico, Cultural y Ambiental" },
+        ]
+      },
     ];
 
     const aprobadas = new Set(JSON.parse(localStorage.getItem('aprobadas')) || []);
